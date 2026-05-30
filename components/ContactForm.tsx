@@ -5,6 +5,7 @@ import Link from "next/link";
 import { AlertCircle, CheckCircle2, Send } from "lucide-react";
 import { cn } from "@/lib/cn";
 import type { Dictionary, Locale } from "@/lib/i18n";
+import { submitContactForm } from "@/app/[locale]/contact/actions";
 
 type Field = "name" | "email" | "phone" | "subject" | "message";
 type Errors = Partial<Record<Field | "consent", string>>;
@@ -47,10 +48,15 @@ export function ContactForm({
 
     setStatus("submitting");
     try {
-      // Placeholder: replace with a Server Action / email provider (e.g. Resend),
-      // which must also re-validate input and throw on failure so the catch fires.
-      await new Promise((resolve) => setTimeout(resolve, 700));
-      setStatus("success");
+      const result = await submitContactForm({
+        name: values.name,
+        email: values.email,
+        phone: values.phone,
+        subject: values.subject,
+        message: values.message,
+        locale,
+      });
+      setStatus(result.ok ? "success" : "error");
     } catch {
       setStatus("error");
     }
