@@ -3,7 +3,7 @@ import { defaultLocale, locales } from "@/lib/i18n";
 
 const PUBLIC_FILE = /\.[\w-]+$/; // anything with an extension (e.g. .png, .ico)
 
-export function proxy(request: NextRequest) {
+export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // Skip Next internals, API routes, and any path that looks like a file.
