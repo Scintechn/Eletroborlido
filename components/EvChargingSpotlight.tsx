@@ -1,5 +1,6 @@
 import { CheckCircle2, MessageCircle, PlugZap, Wifi } from "lucide-react";
 import { Container } from "./ui/Container";
+import { WhatsAppLink } from "./WhatsAppLink";
 import { business, whatsappLink } from "@/lib/business";
 import type { Dictionary } from "@/lib/i18n";
 
@@ -85,16 +86,15 @@ export function EvChargingSpotlight({ t }: { t: Spotlight }) {
             </div>
 
             <div className="mt-8">
-              <a
+              <WhatsAppLink
                 href={whatsappLink(t.whatsappPrefill)}
-                target="_blank"
-                rel="noopener noreferrer"
+                location="ev_spotlight"
                 aria-label={`${t.whatsappCta} (${business.whatsapp.display})`}
                 className="inline-flex min-h-[52px] items-center justify-center gap-2.5 rounded-xl bg-[#25D366] px-8 py-4 text-base font-semibold text-white shadow-[0_8px_24px_rgba(37,211,102,.35)] transition-all duration-150 hover:scale-[1.02] hover:bg-[#1ebe57] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#25D366] focus-visible:ring-offset-2 focus-visible:ring-offset-navy-900"
               >
                 <MessageCircle className="h-5 w-5" aria-hidden="true" />
                 {t.whatsappCta}
-              </a>
+              </WhatsAppLink>
               <p className="mt-3 text-xs text-slate-400">{t.footnote}</p>
             </div>
           </div>
