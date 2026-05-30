@@ -8,8 +8,12 @@ const DEFAULT_LOCALE = "pt";
 
 const PUBLIC_FILE = /\.[\w-]+$/; // anything with an extension (e.g. .png, .ico)
 
+// TEMPORARY: verbose logging to diagnose the production 404. Remove the
+// `[proxy]` console.log calls once routing is confirmed healthy.
 export function proxy(request: NextRequest) {
-  const { pathname } = request.nextUrl;
+  const { pathname, search } = request.nextUrl;
+  const host = request.headers.get("host");
+  console.log(`[proxy] hit pathname=${pathname} search=${search} host=${host}`);
 
   // Skip Next internals, API routes, and any path that looks like a file.
   if (
@@ -19,6 +23,7 @@ export function proxy(request: NextRequest) {
     pathname === "/sitemap.xml" ||
     PUBLIC_FILE.test(pathname)
   ) {
+    console.log(`[proxy] skip (internal/file) pathname=${pathname}`);
     return NextResponse.next();
   }
 
@@ -26,11 +31,17 @@ export function proxy(request: NextRequest) {
   const hasLocale = LOCALES.some(
     (locale) => pathname === `/${locale}` || pathname.startsWith(`/${locale}/`)
   );
-  if (hasLocale) return NextResponse.next();
+  if (hasLocale) {
+    console.log(`[proxy] pass-through (has locale) pathname=${pathname}`);
+    return NextResponse.next();
+  }
 
   // Otherwise redirect to the default locale, preserving the rest of the path.
   const url = request.nextUrl.clone();
   url.pathname = `/${DEFAULT_LOCALE}${pathname === "/" ? "" : pathname}`;
+  console.log(
+    `[proxy] redirect pathname=${pathname} -> ${url.pathname}${url.search}`
+  );
   return NextResponse.redirect(url);
 }
 
