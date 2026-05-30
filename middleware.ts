@@ -1,5 +1,10 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { defaultLocale, locales } from "@/lib/i18n";
+
+// Inlined on purpose: middleware runs in the Edge runtime, which can't bundle
+// the full i18n dictionaries (en.ts + pt.ts). Keep this list in sync with
+// `locales` / `defaultLocale` in lib/i18n/index.ts.
+const LOCALES = ["pt", "en"] as const;
+const DEFAULT_LOCALE = "pt";
 
 const PUBLIC_FILE = /\.[\w-]+$/; // anything with an extension (e.g. .png, .ico)
 
@@ -18,18 +23,17 @@ export function middleware(request: NextRequest) {
   }
 
   // If the path already starts with a known locale segment, let it through.
-  const hasLocale = locales.some(
+  const hasLocale = LOCALES.some(
     (locale) => pathname === `/${locale}` || pathname.startsWith(`/${locale}/`)
   );
   if (hasLocale) return NextResponse.next();
 
   // Otherwise redirect to the default locale, preserving the rest of the path.
   const url = request.nextUrl.clone();
-  url.pathname = `/${defaultLocale}${pathname === "/" ? "" : pathname}`;
+  url.pathname = `/${DEFAULT_LOCALE}${pathname === "/" ? "" : pathname}`;
   return NextResponse.redirect(url);
 }
 
 export const config = {
-  // Match everything except _next assets, api, and explicit file paths.
   matcher: ["/((?!_next/|api/|.*\\.[\\w-]+$).*)"],
 };
