@@ -20,11 +20,9 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
-  // Pin the workspace root to this project (a stray lockfile in the home
-  // directory otherwise makes Turbopack infer the wrong root).
-  turbopack: {
-    root: __dirname,
-  },
+  // NOTE: do NOT use Node globals like `__dirname` here. Vercel evaluates
+  // parts of this config inside the Edge runtime for middleware, where
+  // those globals are undefined and will crash the function at request time.
   async headers() {
     return [{ source: "/:path*", headers: securityHeaders }];
   },
