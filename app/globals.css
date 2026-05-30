@@ -1,26 +1,120 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  /* ---- Brand: Navy (primary) ---- */
+  --color-navy-50: #eef2fc;
+  --color-navy-100: #e8edf8;
+  --color-navy-500: #2048a0;
+  --color-navy-600: #1b3a78;
+  --color-navy-700: #152d5e;
+  --color-navy-800: #0f2044;
+  --color-navy-900: #0a1628;
+
+  /* ---- Brand: Electric Yellow (accent) ---- */
+  --color-yellow-400: #fbbf24;
+  --color-yellow-500: #f59e0b;
+  --color-yellow-600: #d97706;
+  --color-yellow-700: #b45309;
+
+  /* ---- Slate (secondary / neutrals) ---- */
+  --color-slate-50: #f9fafb;
+  --color-slate-100: #f3f4f6;
+  --color-slate-200: #e5e7eb;
+  --color-slate-300: #d1d5db;
+  --color-slate-400: #9ca3af;
+  --color-slate-500: #6b7280;
+  --color-slate-700: #374151;
+  --color-slate-900: #1a1f2e;
+
+  /* ---- Semantic surfaces ---- */
+  --color-background: #f9fafb;
+  --color-foreground: #1a1f2e;
+
+  /* ---- Typography (sources injected by next/font) ---- */
+  --font-display: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+  --font-body: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+
+  /* ---- Radius ---- */
+  --radius-md: 0.625rem;
+  --radius-xl: 0.75rem;
+  --radius-2xl: 1rem;
+  --radius-3xl: 1.5rem;
+
+  /* ---- Shadows ---- */
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.08), 0 4px 12px rgba(0, 0, 0, 0.06);
+  --shadow-card-hover: 0 4px 16px rgba(15, 32, 68, 0.15),
+    0 8px 32px rgba(15, 32, 68, 0.08);
+  --shadow-header: 0 1px 0 rgba(0, 0, 0, 0.06), 0 4px 24px rgba(0, 0, 0, 0.08);
+  --shadow-cta: 0 4px 14px rgba(245, 158, 11, 0.4);
+  --shadow-navy: 0 4px 12px rgba(21, 45, 94, 0.35);
+
+  /* ---- Animations ---- */
+  --animate-fade-up: fade-up 0.5s ease-out both;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    /* Matches scroll-mt-24 (6rem) on in-page anchor targets, clearing the
+       sticky header (60px mobile / 72px desktop) plus breathing room. */
+    scroll-padding-top: 6rem;
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    color: var(--color-navy-900);
+    text-wrap: balance;
+  }
+
+  /* Accessible focus ring for keyboard users */
+  :focus-visible {
+    outline: 2px solid var(--color-navy-500);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+}
+
+/* Without JavaScript the IntersectionObserver never fires, so reveal targets
+   must not stay hidden. Force them visible when scripting is unavailable. */
+@media (scripting: none) {
+  [data-reveal] {
+    opacity: 1 !important;
+  }
+}
+
+/* Respect users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
