@@ -274,11 +274,14 @@ export const pt: Dictionary = {
       subject: {
         label: "Assunto",
         placeholder: "Escolha um tópico",
+        // Order mirrors the services list in `services.items` so the form
+        // matches what visitors saw on the services page.
         options: [
-          { value: "electrical", label: "Instalação Elétrica" },
-          { value: "automation", label: "Domótica" },
-          { value: "security", label: "Segurança e Automatismos de Portões" },
-          { value: "appliances", label: "Eletrodomésticos: venda e reparação" },
+          { value: "electrical", label: "Instalações Elétricas" },
+          { value: "security", label: "Sistemas de Segurança e Automatismos de Portões" },
+          { value: "ev_charging", label: "Carregamento de Veículos Elétricos" },
+          { value: "automation", label: "Domótica e Casa Inteligente" },
+          { value: "appliances", label: "Venda e Reparação de Eletrodomésticos" },
           { value: "other", label: "Outro" },
         ],
       },

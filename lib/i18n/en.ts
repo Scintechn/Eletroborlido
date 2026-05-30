@@ -273,10 +273,13 @@ export const en = {
       subject: {
         label: "Subject",
         placeholder: "Select a topic",
+        // Order mirrors the services list in `services.items` so the form
+        // matches what visitors saw on the services page.
         options: [
-          { value: "electrical", label: "Electrical Installation" },
-          { value: "automation", label: "Home Automation" },
-          { value: "security", label: "Security & Gate Automation" },
+          { value: "electrical", label: "Electrical Installations" },
+          { value: "security", label: "Security Systems & Gate Automation" },
+          { value: "ev_charging", label: "EV Charging" },
+          { value: "automation", label: "Home Automation & Smart Home" },
           { value: "appliances", label: "Appliance Sales & Repair" },
           { value: "other", label: "Other" },
         ],
