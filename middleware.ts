@@ -36,4 +36,8 @@ export function middleware(request: NextRequest) {
 
 export const config = {
   matcher: ["/((?!_next/|api/|.*\\.[\\w-]+$).*)"],
+  // Run on the Node.js runtime via Fluid Compute. Avoids the Edge-runtime
+  // "__dirname is not defined" crash we saw when Next/Turbopack bundles
+  // touched Node globals from transitive dependencies.
+  runtime: "nodejs",
 };
