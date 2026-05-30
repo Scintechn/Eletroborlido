@@ -1,14 +1,14 @@
 import { NextResponse, type NextRequest } from "next/server";
 
-// Inlined on purpose: middleware runs in the Edge runtime, which can't bundle
-// the full i18n dictionaries (en.ts + pt.ts). Keep this list in sync with
-// `locales` / `defaultLocale` in lib/i18n/index.ts.
+// Inlined on purpose: bundling the full i18n dictionaries (en.ts + pt.ts)
+// from this file pulls a lot of code into the proxy bundle. Keep this list
+// in sync with `locales` / `defaultLocale` in lib/i18n/index.ts.
 const LOCALES = ["pt", "en"] as const;
 const DEFAULT_LOCALE = "pt";
 
 const PUBLIC_FILE = /\.[\w-]+$/; // anything with an extension (e.g. .png, .ico)
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // Skip Next internals, API routes, and any path that looks like a file.
@@ -36,8 +36,4 @@ export function middleware(request: NextRequest) {
 
 export const config = {
   matcher: ["/((?!_next/|api/|.*\\.[\\w-]+$).*)"],
-  // Run on the Node.js runtime via Fluid Compute. Avoids the Edge-runtime
-  // "__dirname is not defined" crash we saw when Next/Turbopack bundles
-  // touched Node globals from transitive dependencies.
-  runtime: "nodejs",
 };
